@@ -1,0 +1,19 @@
+
+OPERATOR CONTROLS MAPPING
+
+// Transport
+right trigger = transporter / indexer
+Y + right trigger = REVERSE transporter / indexer
+left joystick (y) = transporter
+right joystick (y) = indexer
+
+// Intake
+left trigger = intake IN 
+Y + left trigger = intake OUT
+right bumper = deploy intake
+left bumper = stow intake
+
+// Punch
+A = both punchers
+X = front punch
+B = back punch 

@@ -1,0 +1,14 @@
+
+DRIVER CONTROLS MAPPING
+
+// Drive
+left joystick (y) = forward / backward
+right joystick (x) = right / left
+left trigger = cut speed (75%)
+
+// Climb
+right trigger = grasshopper drive / climber roller speed
+Y = grasshopper deploy
+X = grasshopper stow
+right bumper = hook deploy
+left bumber = hook stow
