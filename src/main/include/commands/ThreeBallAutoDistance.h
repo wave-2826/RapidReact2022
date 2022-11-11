@@ -8,35 +8,35 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
-// ROBOTBUILDER TYPE: Command - DEPLOY INTAKE COMMAND
+// ROBOTBUILDER TYPE: SequentialCommandGroup - THREE BALL AUTO COMMAND
 
 #pragma once
 
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/CommandBase.h>
-#include "frc2/command/WaitCommand.h"
-#include "subsystems/Intake.h"
+#include <frc2/command/CommandHelper.h>
+#include <frc2/command/SequentialCommandGroup.h>
+#include "subsystems/Punch.h"
+#include "subsystems/Drive.h"
+#include <subsystems/Intake.h>
+#include <subsystems/Transport.h>
 
 /**
- * header file for deploy intake command
+ * header file for three ball auto command
  *
  * @author WAVE Robotics 2826
  */
-class DeployIntakeCommand: public frc2::WaitCommand {
+class ThreeBallAutoDistance
+    : public frc2::CommandHelper<frc2::SequentialCommandGroup, ThreeBallAutoDistance> {
 
 public:
+    
+    ThreeBallAutoDistance(Punch* punch, Drive* drive, Intake* intake, Transport* transport);
+    ThreeBallAutoDistance(){};
 
-    DeployIntakeCommand(units::second_t timeout, Intake* intake);
-
-    void Initialize() override;
-    void Execute() override;
-    bool IsFinished() override;
-    void End(bool interrupted) override;
     bool RunsWhenDisabled() const override;
 
 private:
 
-    int phase;
-    units::second_t m_timeout;
-    Intake* m_intake;
 };
+

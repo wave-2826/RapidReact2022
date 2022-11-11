@@ -32,8 +32,7 @@ Climb::Climb()
     m_grasshopperDrive = new CANSparkMax(GRASSHOPPER_DRIVE, CANSparkMaxLowLevel::MotorType::kBrushless);
     m_rightGrasshopperDeploy = new CANSparkMax(RIGHT_GRASSHOPPER_DEPLOY, CANSparkMaxLowLevel::MotorType::kBrushless);
     m_leftGrasshopperDeploy = new CANSparkMax(LEFT_GRASSHOPPER_DEPLOY, CANSparkMaxLowLevel::MotorType::kBrushless);
-    m_isRightGrasshopperDeployed = new DigitalInput(IS_RIGHT_GRASSHOPPER_DEPLOYED); 
-    m_isLeftGrasshopperDeployed = new DigitalInput(IS_LEFT_GRASSHOPPER_DEPLOYED);
+    m_isHookDeployed = new DigitalInput(IS_HOOK_DEPLOYED);
     m_leftGrasshopperEncoder = new SparkMaxRelativeEncoder(m_leftGrasshopperDeploy->GetEncoder());
     m_rightGrasshopperEncoder = new SparkMaxRelativeEncoder(m_rightGrasshopperDeploy->GetEncoder());
 
@@ -153,14 +152,18 @@ void Climb::SetGrasshopperDeploySpeed(double leftSpeed, double rightSpeed)
     m_rightGrasshopperDeploy->Set(rightSpeed);
 }
 
-// grasshopper deploy sensor getters
-// CURRENTLY NO SENSORS
-bool Climb::GetRightGrasshopperDeployed()
+// Hook Deploy Sensor Getters + Setters
+double Climb::GetHookDeploySensor()
 {
-    return m_isRightGrasshopperDeployed->Get();
+    // true = 0
+    return !m_isHookDeployed->Get();
 }
-bool Climb::GetLeftGrasshopperDeployed()
+void Climb::SetHookDeployState(bool state)
 {
-    return m_isLeftGrasshopperDeployed->Get();
+    m_hookDeployState = state;
+}
+bool Climb::GetHookDeployState()
+{
+    return m_hookDeployState;
 }
 

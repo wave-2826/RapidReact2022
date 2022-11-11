@@ -30,12 +30,12 @@ PunchAndExitTarmac::PunchAndExitTarmac(Punch* punchPtr, Drive* drivePtr) {
     
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
-    std::cout << "PunchAndExitTarmac - about to add FrontPunchCOmand" << std::endl;
+    // std::cout << "PunchAndExitTarmac - about to add FrontPunchCOmand" << std::endl;
     AddCommands(
         FrontPunchCommand(punchPtr),
-        WaitCommand1(units::second_t(0.5)),
+        WaitCommand1(units::second_t(.75)),
         // leave tarmac
-        DriveForwardTimed(units::second_t(2.0), drivePtr)
+        DriveForwardTimed(units::second_t(1.5), drivePtr)
     );
 }
 

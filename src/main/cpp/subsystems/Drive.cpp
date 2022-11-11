@@ -17,6 +17,7 @@
 #include "subsystems/Drive.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include "../include/Reference.h"
+#include <iostream>
 
 using namespace rev;
 using namespace frc;
@@ -39,6 +40,15 @@ Drive::Drive() : frc2::PIDSubsystem(frc2::PIDController{kP, kI, kD}) {
     m_rightControllerGroup = new MotorControllerGroup(*m_rightBackDrive, *m_rightFrontDrive);
     m_leftControllerGroup = new MotorControllerGroup(*m_leftBackDrive, *m_leftFrontDrive);
     m_waveDrive = new DifferentialDrive(*m_leftControllerGroup, *m_rightControllerGroup);
+    m_gyro = new AHRS(SPI::Port::kMXP);
+    m_driveEncoder = new SparkMaxRelativeEncoder(m_leftBackDrive->GetEncoder());
+    //m_turnPID =new PIDController();
+
+    // drive motors set to coast
+    m_rightFrontDrive->SetIdleMode(CANSparkMax::IdleMode::kCoast);
+    m_leftFrontDrive->SetIdleMode(CANSparkMax::IdleMode::kCoast);
+    m_rightBackDrive->SetIdleMode(CANSparkMax::IdleMode::kCoast);
+    m_leftBackDrive->SetIdleMode(CANSparkMax::IdleMode::kCoast);
 
     // SAFETY SHOULD BE ENABLED
     m_waveDrive->SetSafetyEnabled(true);
@@ -55,12 +65,33 @@ Drive::Drive() : frc2::PIDSubsystem(frc2::PIDController{kP, kI, kD}) {
 
     m_gyro = new AHRS(SPI::Port::kMXP);
 
+    m_moveInputSpeed = 0;
+    m_rotateInputSpeed = 0;
+
+    m_previousMoveSpeed = 0;
+    m_previousRotateSpeed = 0;
+
     // Use these to get going:
     // SetSetpoint() -  Sets where the PID controller should move the system
     //                  to
     // Enable() - Enables the PID controller.
 }
 
+
+double Drive::GetPreviousMoveSpeed() {
+    return m_previousMoveSpeed;
+}
+
+void Drive::SetPreviousMoveSpeed(double speed) {
+    m_previousMoveSpeed = speed;
+}
+double Drive::GetPreviousRotateSpeed() {
+    return m_previousRotateSpeed;
+}
+
+void Drive::SetPreviousRotateSpeed(double speed) {
+    m_previousRotateSpeed = speed;
+}
 
 void Drive::Periodic() {
     // Put code here to be run every loop
@@ -82,8 +113,9 @@ void Drive::UseOutput(double output, double setpoint) {
 
 }
 
-void Drive::arcadeDrive(double move,double rotate)
+void Drive::arcadeDrive(double move, double rotate)
 {
+    // std::cout << "ARCADE DRIVE: " << move << "," << rotate << std::endl;
     m_waveDrive->ArcadeDrive(move, -rotate);
 }
 
@@ -103,4 +135,109 @@ double Drive::GetLeftFrontDriveCurrent()
 double Drive::GetLeftBackDriveCurrent()
 {
     return m_leftBackDrive->GetOutputCurrent();
+}
+
+// double Drive::TransformDriveSpeed(double speed, double targetSpeed)
+// {
+//     double newSpeed = speed;
+
+//     // less than target - ramp up
+//     if (speed < targetSpeed)
+//     {
+//       // do not exceed 100% target speed
+//       if ((speed + 0.1) > targetSpeed)
+//       {
+//         newSpeed = targetSpeed;
+//       }
+//       // increment speed to target
+//       else
+//       {
+//         newSpeed = newSpeed + 0.1;
+//       }
+//     }
+//     // more than target - ramp down
+//     if (speed > targetSpeed)
+//     {
+//       // do not exceed -100% target speed
+//       if ((speed - 0.1) < targetSpeed)
+//       {
+//         newSpeed = targetSpeed;
+//       }
+//       // decrement speed to target
+//       else
+//       {
+//         newSpeed = newSpeed - 0.1;
+//       }
+//     }
+
+//     return newSpeed;
+// }
+
+double Drive::LerpDriveSpeed(double speed, double targetSpeed, double movePercentage) {
+    double newSpeed = speed;
+    // current speed is less than target speed
+    if (speed < targetSpeed)
+    {
+        newSpeed = speed + std::fabs(targetSpeed - speed) * movePercentage;
+    }
+    // current speed is greater than target speed
+    else if (speed > targetSpeed)
+    {
+        newSpeed = speed - std::fabs(targetSpeed - speed) * movePercentage;
+    }
+    // adding a buffer between newSpeed and targetSpeed
+    if (std::abs(targetSpeed - newSpeed) < 0.01f) {
+        newSpeed = targetSpeed;
+    }
+    // prevent newSpeed from going outside of physical boundaries
+    if (newSpeed <= -1.0f)
+    {
+        newSpeed = -1.0f;
+    }
+    else if (newSpeed >= 1.0f)
+    {
+        newSpeed = 1.0f;
+    }
+
+    return newSpeed;
+}
+
+// move input speed getters + setters
+double Drive::GetMoveInputSpeed()
+{
+    return m_moveInputSpeed;
+}
+void Drive::SetMoveInputSpeed(double moveInputSpeed)
+{
+    m_moveInputSpeed = moveInputSpeed;
+}
+
+// rotate input speed getters + setters
+double Drive::GetRotateInputSpeed()
+{
+    return m_rotateInputSpeed;
+}
+void Drive::SetRotateInputSpeed(double rotateInputSpeed)
+{
+    m_rotateInputSpeed = rotateInputSpeed;
+}
+
+float Drive::GetAngle(){
+    return m_gyro->GetAngle();
+}
+
+void Drive::ZeroAngle(){
+    m_gyro->ZeroYaw();
+}
+
+// drive position getters + setters
+double Drive::GetDriveEncoderPosition()
+{
+    // std::cout << "ENTERED GET DRIVE POSITION" << std::endl;
+    return m_driveEncoder->GetPosition() - m_drivePosition;
+}
+void Drive::ResetDrivePosition(double newPosition)
+{
+    // to 0 pass in GetDrivePosition
+    m_drivePosition = newPosition;
 }

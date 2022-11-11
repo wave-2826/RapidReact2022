@@ -10,5 +10,3 @@ left trigger = cut speed (75%)
 right trigger = grasshopper drive / climber roller speed
 Y = grasshopper deploy
 X = grasshopper stow
-right bumper = hook deploy
-left bumber = hook stow

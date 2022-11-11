@@ -39,7 +39,14 @@ public:
     double GetMeasurement();
     void UseOutput(double output, double setpoint);
 
-    static constexpr const double kP = 1.0;
+    //double TransformDriveSpeed(double speed, double targetSpeed);
+    double LerpDriveSpeed(double speed, double targetSpeed, double movePercentage);
+    double GetMoveInputSpeed();
+    void SetMoveInputSpeed(double moveInputSpeed);
+    double GetRotateInputSpeed();
+    void SetRotateInputSpeed(double rotateInputSpeed);
+
+    static constexpr const double kP = 0.1;
     static constexpr const double kI = 0.0;
     static constexpr const double kD = 0.0;
     static constexpr const double kF = 0.0;
@@ -49,6 +56,18 @@ public:
     double GetRightBackDriveCurrent();
     double GetLeftFrontDriveCurrent();
     double GetLeftBackDriveCurrent();
+
+    double GetDriveEncoderPosition();
+    void ResetDrivePosition(double newPosition);
+
+    float GetAngle();
+    void ZeroAngle();
+    float GetAngleDeviation();
+
+    double GetPreviousMoveSpeed();
+    void SetPreviousMoveSpeed(double speed);
+    double GetPreviousRotateSpeed();
+    void SetPreviousRotateSpeed(double speed);
 
 private:
 
@@ -62,8 +81,19 @@ private:
     frc::DifferentialDrive *m_waveDrive;
 
     frc::Encoder m_sparkMaxEncoder{5, 6, false, frc::Encoder::k4X};
+    rev::SparkMaxRelativeEncoder *m_driveEncoder;
 
     AHRS* m_gyro;
+    //frc2::PIDController* m_turnPID;
 
+    double m_moveInputSpeed;
+    double m_rotateInputSpeed;
+    double m_drivePosition;
+
+    float m_targetAngle;
+
+    double m_previousMoveSpeed;
+    double m_previousRotateSpeed;
+    
 };
 

@@ -8,25 +8,26 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
-// ROBOTBUILDER TYPE: Command - DEPLOY INTAKE COMMAND
+// ROBOTBUILDER TYPE: WaitCommand - DRIVE COMMAND
 
 #pragma once
 
+#include <units/time.h>
+#include "frc2/command/WaitCommand.h"
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/CommandBase.h>
-#include "frc2/command/WaitCommand.h"
-#include "subsystems/Intake.h"
+#include <subsystems/Drive.h>
 
 /**
- * header file for deploy intake command
+ * header file for drive command
  *
  * @author WAVE Robotics 2826
  */
-class DeployIntakeCommand: public frc2::WaitCommand {
+class DriveHeadingDistanceCommand: public frc2::CommandHelper<frc2::CommandBase, DriveHeadingDistanceCommand> {
 
 public:
 
-    DeployIntakeCommand(units::second_t timeout, Intake* intake);
+    DriveHeadingDistanceCommand(double moveInput, double distance, Drive* drive);
 
     void Initialize() override;
     void Execute() override;
@@ -36,7 +37,9 @@ public:
 
 private:
 
-    int phase;
-    units::second_t m_timeout;
-    Intake* m_intake;
+    Drive* m_drive;
+    double m_distance;
+    double m_moveInput;
+    
 };
+

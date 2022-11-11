@@ -8,42 +8,44 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
-// ROBOTBUILDER TYPE: WaitCommand - DRIVE FORWARD TIMED COMMAND
+// ROBOTBUILDER TYPE: WaitCommand - DRIVE COMMAND
 
-#include "commands/DriveForwardTimed.h"
+#include "commands/DriveHeadingCommand.h"
 #include "commands/WaitCommand1.h"
 #include "iostream"
 
 /**
- * source code for drive forward timed 
+ * source code for drive command
  * 
  * @author WAVE Robotics 2826
  */
-DriveForwardTimed::DriveForwardTimed(units::second_t timeout, Drive* drive) : WaitCommand(timeout),
-    m_timeout(timeout), m_drive(drive)
+DriveHeadingCommand::DriveHeadingCommand(double moveInput, units::second_t timeout, Drive* drive) : WaitCommand(timeout),
+    m_moveInput(moveInput), m_timeout(timeout), m_drive(drive)
 {
     // Use AddRequirements() here to declare subsystem dependencies
     // eg. AddRequirements(Robot::chassis.get());
-    SetName("DriveForwardTimed");
+    SetName("DriveHeadingCommand");
 }
 
 // Called just before this Command runs the first time
-void DriveForwardTimed::Initialize() {
+void DriveHeadingCommand::Initialize() {
     WaitCommand::Initialize();
 }
 
 // Called repeatedly when this Command is scheduled to run
-void DriveForwardTimed::Execute() {
-    // CHANGED TO NEGATIVE BC IT DROVE "BACKWARDS"
-    m_drive->arcadeDrive(-0.5,0.0);
+void DriveHeadingCommand::Execute() {
+    float angle_correction = -(m_drive->GetAngle() * 0.05f );
+    // std::cout << "Angle" << m_drive->GetAngle() << std::endl;
+    // std::cout << "Angle Correction" << angle_correction << std::endl;
+    m_drive->arcadeDrive(m_moveInput, angle_correction);
 }
 
 // Called once after isFinished returns true
-void DriveForwardTimed::End(bool interrupted) {
+void DriveHeadingCommand::End(bool interrupted) {
     WaitCommand::End(interrupted);
     m_drive->arcadeDrive(0.0,0.0);
 }
 
-bool DriveForwardTimed::RunsWhenDisabled() const {
+bool DriveHeadingCommand::RunsWhenDisabled() const {
     return false;
 }

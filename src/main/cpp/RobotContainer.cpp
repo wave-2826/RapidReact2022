@@ -19,7 +19,7 @@ RobotContainer* RobotContainer::m_robotContainer = NULL;
 
 RobotContainer* GetContainer()
 {
-    std::cout << "GetContainer() About to call GetInstance()" << std::endl;
+    // std::cout << "GetContainer() About to call GetInstance()" << std::endl;
     return RobotContainer::GetInstance();
 }
 
@@ -38,27 +38,36 @@ RobotContainer::RobotContainer() : m_autonomousCommand() {
 
     ConfigureButtonBindings();
 
-    // add auto options to chooser  
-    m_chooser.SetDefaultOption("Do Nothing", new AutonomousCommand());
-    // recommended to use AddObject instead of AddOption
+    // PREVIOUS TESTING COMMANDS
     // m_chooser.AddOption("Punch And Exit Tarmac", new PunchAndExitTarmac(&m_punch, &m_drive));
-    // m_chooser.AddOption("Front Punch ", new FrontPunchCommand(&m_punch));
-    // m_chooser.AddOption("Three Ball Auto", new ThreeBallAuto(&m_punch, &m_drive, &m_intake, &m_transport));
-    m_chooser.AddObject("Punch And Exit Tarmac", new PunchAndExitTarmac(&m_punch, &m_drive));
-    m_chooser.AddObject("Front Punch", new FrontPunchCommand(&m_punch));
-    m_chooser.AddObject("Three Ball Auto", new ThreeBallAuto(&m_punch, &m_drive, &m_intake, &m_transport));
+    // m_chooser.AddOption("Front Punch", new FrontPunchCommand(&m_punch));
+    // m_chooser.AddOption("Run Transport", new TransportCommand(&m_intake, &m_transport));
+    // m_chooser.AddOption("Drive Forward Timed", new DriveForwardTimed(units::second_t(2), &m_drive));
+    // m_chooser.AddOption("Timed Three Ball Auto", new ThreeBallAutoTimed(&m_punch, &m_drive, &m_intake, &m_transport));
+
+    // add auto options to chooser  
+    // m_chooser.SetDefaultOption("Do Nothing", new AutonomousCommand());
+    // m_chooser.SetDefaultOption("Two Ball Auto", new TwoBallAutoTimed(&m_punch, &m_drive, &m_intake, &m_transport));
+    m_chooser.SetDefaultOption("Taxi Two Ball Auto", new TaxiTwoBallAuto(&m_punch, &m_drive, &m_intake, &m_transport));
+    m_chooser.AddOption("Punch And Exit Tarmac", new PunchAndExitTarmac(&m_punch, &m_drive));
+    m_chooser.AddOption("Two Ball Auto", new TwoBallAutoTimed(&m_punch, &m_drive, &m_intake, &m_transport));
+    m_chooser.AddOption("Three Ball Auto", new ThreeBallAutoDistance(&m_punch, &m_drive, &m_intake, &m_transport));
+    m_chooser.AddOption("Drive Distance", new DriveHeadingDistanceCommand(0.5, 10.0, &m_drive));
+    m_chooser.AddOption("Deploy Intake", new DeployIntakeCommand(units::second_t(2.0), &m_intake));
+    m_chooser.AddOption("Do Nothing", new AutonomousCommand());
+    m_chooser.AddOption("Taxi Two Ball Auto", new TaxiTwoBallAuto(&m_punch, &m_drive, &m_intake, &m_transport));
     
     frc::SmartDashboard::PutData("Auto Mode", &m_chooser);
 }
 
 RobotContainer* RobotContainer::GetInstance() {
     if (m_robotContainer == NULL) {
-        std::cout << "RobotContainerNull: assign new RobotContainer()" << std::endl;
+        // std::cout << "RobotContainerNull: assign new RobotContainer()" << std::endl;
         m_robotContainer = new RobotContainer();
     }
     else
     {
-        std::cout << "RobotContainer Not Null" << std::endl;
+        // std::cout << "RobotContainer Not Null" << std::endl;
     }
     return(m_robotContainer);
 }

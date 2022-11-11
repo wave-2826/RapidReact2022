@@ -17,9 +17,41 @@
 
 #include "RobotContainer.h"
 
+#include <cstdio>
+#include <thread>
+
+#include <cameraserver/CameraServer.h>
+#include <frc/TimedRobot.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/core/types.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
+#include "rev/ColorSensorV3.h"
+
+enum {
+    phase_0_notStarted,
+    phase_1_sensorsNotFound,
+    phase_2_sensorsFound,
+    phase_3_aligned
+};
+
 class Robot : public frc::TimedRobot {
   
  public:
+
+  /**
+   * Change the I2C port below to match the connection of your color sensor
+   */
+  static constexpr auto i2cPort = frc::I2C::Port::kOnboard;
+
+  /**
+   * A Rev Color Sensor V3 object is constructed with an I2C port as a 
+   * parameter. The device will be automatically initialized with default 
+   * parameters.
+   */
+  rev::ColorSensorV3 m_colorSensor{i2cPort};
+
+  static void VisionThread();
 
   void RobotInit() override;
   void RobotPeriodic() override;
@@ -40,7 +72,13 @@ class Robot : public frc::TimedRobot {
   frc2::Command* m_backPunchCommand = nullptr;
   frc2::Command* m_frontPunchCommand = nullptr;
   frc2::Command* m_punchAndExitTarmac = nullptr;
+  frc2::Command* m_driveTurn90Command = nullptr;
+  frc2::Command* m_driveStraightCommand = nullptr;
+
+  int m_phase;
 
   RobotContainer* m_container;
+
+   
 
 };

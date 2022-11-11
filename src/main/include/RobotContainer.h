@@ -22,17 +22,25 @@
 #include "subsystems/Transport.h"
 #include "subsystems/Vision.h"
 
+// need to include auto routines
 #include "commands/AutonomousCommand.h"
 #include "commands/Command1.h"
 #include "commands/SequentialCommandGroup1.h"
 #include "commands/SequentialPunch.h"
 #include "commands/BackPunchCommand.h"
 #include "commands/FrontPunchCommand.h"
-#include "commands/ThreeBallAuto.h"
+#include "commands/DriveHeadingDistanceCommand.h"
 #include "commands/SetpointCommand1.h"
 #include "commands/WaitCommand1.h"
 #include "commands/PunchAndExitTarmac.h"
 #include "commands/DriveForwardTimed.h"
+#include "commands/DeployIntakeCommand.h"
+#include "commands/TransportCommand.h"
+#include "commands/TwoBallAutoTimed.h"
+#include "commands/ThreeBallAutoTimed.h"
+#include "commands/ThreeBallAutoDistance.h"
+#include "commands/TaxiTwoBallAuto.h"
+
 #include <frc/XboxController.h>
 
 class RobotContainer {

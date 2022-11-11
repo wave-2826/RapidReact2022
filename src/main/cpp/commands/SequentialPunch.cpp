@@ -34,7 +34,7 @@ SequentialPunch::SequentialPunch(Punch* punch) : m_punch(punch) {
                 BackPunchCommand(m_punch),
                 frc2::SequentialCommandGroup
                 (
-                    WaitCommand1(units::second_t(0.2)),
+                    WaitCommand1(units::second_t(0.425)),
                     FrontPunchCommand(m_punch)
                 )
             )

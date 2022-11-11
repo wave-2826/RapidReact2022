@@ -35,7 +35,7 @@ void TransportCommand::Initialize() {
 void TransportCommand::Execute() {
     m_intake->SetIntakeRoller(1.0);
     m_transport->SetIndexerSpeed(1.0, 1.0);
-    m_transport->SetTransporterBeltSpeed(1.0);
+    m_transport->SetTransporterBeltSpeed(-1.0);
 }
 
 // Called once after isFinished returns true

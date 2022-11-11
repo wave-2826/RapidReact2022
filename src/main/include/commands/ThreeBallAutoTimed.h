@@ -26,13 +26,13 @@
  *
  * @author WAVE Robotics 2826
  */
-class ThreeBallAuto
-    : public frc2::CommandHelper<frc2::SequentialCommandGroup, ThreeBallAuto> {
+class ThreeBallAutoTimed
+    : public frc2::CommandHelper<frc2::SequentialCommandGroup, ThreeBallAutoTimed> {
 
 public:
     
-    ThreeBallAuto(Punch* punch, Drive* drive, Intake* intake, Transport* transport);
-    ThreeBallAuto(){};
+    ThreeBallAutoTimed(Punch* punch, Drive* drive, Intake* intake, Transport* transport);
+    ThreeBallAutoTimed(){};
 
     bool RunsWhenDisabled() const override;
 

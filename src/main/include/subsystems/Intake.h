@@ -42,7 +42,6 @@ public:
     void SetIntakeRoller(double speed);
     void SetIntakeDeploy(double speed);
 
-    bool GetIntakeStowed();
     bool GetIntakeDeployed();
 
     double GetIntakeRollerCurrent();
@@ -62,7 +61,6 @@ public:
     private:
     // It's desirable that everything possible is private except
     // for methods that implement subsystem capabilities
-    frc::DigitalInput *m_isIntakeStowed;
     frc::DigitalInput *m_isIntakeDeployed;
     rev::CANSparkMax *m_intakeRoller;
     rev::CANSparkMax *m_intakeDeploy;

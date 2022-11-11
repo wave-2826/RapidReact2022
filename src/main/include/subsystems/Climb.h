@@ -29,13 +29,12 @@ private:
     // for methods that implement subsystem capabilities
     rev::CANSparkMax *m_climberRoller;
     rev::CANSparkMax *m_hookDeploy;
-    frc::DigitalInput *m_isRightGrasshopperDeployed;
-    frc::DigitalInput *m_isLeftGrasshopperDeployed;
     rev::CANSparkMax *m_grasshopperDrive;
     rev::CANSparkMax *m_rightGrasshopperDeploy;
     rev::CANSparkMax *m_leftGrasshopperDeploy;
     rev::SparkMaxRelativeEncoder *m_leftGrasshopperEncoder;
     rev::SparkMaxRelativeEncoder *m_rightGrasshopperEncoder;
+    frc::DigitalInput *m_isHookDeployed;
 
     bool m_leftState;
     bool m_rightState;
@@ -44,6 +43,7 @@ private:
     double m_rightPosition;
     double m_leftGrasshopperStow;
     double m_rightGrasshopperStow;
+    bool m_hookDeployState;
 
 public:
 
@@ -66,6 +66,10 @@ public:
     double GetLeftGrasshopperPosition();
     double GetRightGrasshopperPosition();
 
+    double GetHookDeploySensor();
+    void SetHookDeployState(bool state);
+    bool GetHookDeployState();
+
     void SetClimberRollerSpeed(double speed);
 
     void SetHookDeploySpeed(double speed);
@@ -79,8 +83,6 @@ public:
     double GetLeftGrasshopperDeployCurrent();
     double GetRightGrasshopperDeployCurrent();
 
-    bool GetRightGrasshopperDeployed();
-    bool GetLeftGrasshopperDeployed();
 
 };
 

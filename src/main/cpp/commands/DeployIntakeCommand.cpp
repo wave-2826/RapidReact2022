@@ -11,6 +11,7 @@
 // ROBOTBUILDER TYPE: Command - DEPLOY INTAKE COMMAND
 
 #include "commands/DeployIntakeCommand.h"
+#include "commands/WaitCommand1.h"
 #include "iostream"
 
 /**
@@ -18,7 +19,9 @@
  * 
  * @author WAVE Robotics 2826
  */
-DeployIntakeCommand::DeployIntakeCommand(Intake* intake) : m_intake(intake){
+DeployIntakeCommand::DeployIntakeCommand(units::second_t timeout, Intake* intake) : WaitCommand(timeout),
+m_timeout(timeout), m_intake(intake)
+{
     // Use AddRequirements() here to declare subsystem dependencies
     // eg. AddRequirements(m_Subsystem);
     SetName("DeployIntakeCommand");
@@ -27,15 +30,16 @@ DeployIntakeCommand::DeployIntakeCommand(Intake* intake) : m_intake(intake){
 // Called just before this Command runs the first time
 void DeployIntakeCommand::Initialize() 
 {
-    std::cout << "INTAKE DEPLOY COMMAND Initialize()" << std::endl;
+    WaitCommand::Initialize();
+    // std::cout << "INTAKE DEPLOY COMMAND Initialize()" << std::endl;
     if (!m_intake->GetIntakeDeployed())
     {
-        std::cout << "FRONT Initialize() >>> phase 1" << std::endl;
+        // std::cout << "FRONT Initialize() >>> phase 1" << std::endl;
         phase = phase_1_beforeSensor;
     } 
     else 
     {
-        std::cout << "FRONT Initialize() >>> phase 2" << std::endl;
+        // std::cout << "FRONT Initialize() >>> phase 2" << std::endl;
         phase = phase_2_inSensor;
     }
 }
@@ -43,14 +47,14 @@ void DeployIntakeCommand::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void DeployIntakeCommand::Execute() 
 {
-    std::cout << "DEPLOY INTAKE COMMAND Execute()" << std::endl;
+    // std::cout << "DEPLOY INTAKE COMMAND Execute()" << std::endl;
     switch(phase)
     {
         case phase_0_stowed:
             //right when the person press punch. 
             //If the sensor is currently seen go to insensor phase.
             //if sensor is not seen go to exit sensor phase.
-            std::cout << "phase 0: stowed" << std::endl;
+            // std::cout << "phase 0: stowed" << std::endl;
             if (!m_intake->GetIntakeDeployed())
             {
             phase = phase_1_beforeSensor;
@@ -62,8 +66,8 @@ void DeployIntakeCommand::Execute()
             }
             break;
         case phase_1_beforeSensor:
-            std::cout << "phase 1: before sensor" << std::endl;
-            if(m_intake->GetIntakeDeployed())
+            // std::cout << "phase 1: before sensor" << std::endl;
+            if(!m_intake->GetIntakeDeployed())
             {
                 //before sensor triggered, still need to keep rotating the cam.
                 phase = phase_1_beforeSensor;
@@ -77,7 +81,7 @@ void DeployIntakeCommand::Execute()
             break;
         case phase_2_inSensor:
             //Do in sensor stuff
-            std::cout << "phase 2: in sensor" << std::endl;
+            // std::cout << "phase 2: in sensor" << std::endl;
             if(m_intake->GetIntakeDeployed())
             {
                 //still in sensor, keep the motor going
@@ -96,11 +100,16 @@ void DeployIntakeCommand::Execute()
             // Do after sensor things
             // Now that we triggered the sensor and exited it, we need to know when 
             // we go the correct distance further to be fully deployed.
-            std::cout << "phase 3: after sensor" << std::endl;
+            // std::cout << "phase 3: after sensor" << std::endl;
             phase = phase_3_afterSensor;
-            if (fabs(m_intake->GetIntakeDeployPosition() - m_intake->GetTriggeredPosition()) < 2)
+            if (fabs(m_intake->GetIntakeDeployPosition() - m_intake->GetTriggeredPosition()) < 13)
             {
                 m_intake->SetIntakeDeploy(0.5);
+                phase = phase_3_afterSensor;
+            }
+            else if (fabs(m_intake->GetIntakeDeployPosition() - m_intake->GetTriggeredPosition()) < 22)
+            {
+                m_intake->SetIntakeDeploy(0.1);
                 phase = phase_3_afterSensor;
             }
             else
@@ -117,10 +126,13 @@ void DeployIntakeCommand::Execute()
 // Make this return true when this Command no longer needs to run execute()
 bool DeployIntakeCommand::IsFinished() 
 {
-    std::cout << "INTAKE DEPLOY COMMAND IsFinished()" << std::endl;
+    // std::cout << "INTAKE DEPLOY COMMAND IsFinished()" << std::endl;
     if (phase == phase_4_fullyDeployed)
     {
-        std::cout << "phase 4: fully deployed" << std::endl;
+        return true;
+    }
+    else if (WaitCommand::IsFinished())
+    {
         return true;
     }
     else
@@ -131,7 +143,8 @@ bool DeployIntakeCommand::IsFinished()
 
 // Called once after isFinished returns true
 void DeployIntakeCommand::End(bool interrupted) {
-    std::cout << "INTAKE DEPLOY COMMAND End()" << std::endl;
+    // std::cout << "INTAKE DEPLOY COMMAND End()" << std::endl;
+    WaitCommand::End(interrupted);
     m_intake->SetIntakeDeploy(0);
 }
 

@@ -23,13 +23,12 @@ using namespace frc;
  * 
  * @author WAVE Robotics 2826
  */
-Intake::Intake(){
+Intake::Intake() {
     SetName("Intake");
     SetSubsystem("Intake");
 
     m_intakeRoller = new CANSparkMax(INTAKE_ROLLER, CANSparkMaxLowLevel::MotorType::kBrushless);
     m_intakeDeploy = new CANSparkMax(INTAKE_DEPLOY, CANSparkMaxLowLevel::MotorType::kBrushless);
-    m_isIntakeStowed = new DigitalInput(IS_INTAKE_STOWED);
     m_isIntakeDeployed = new DigitalInput(IS_INTAKE_DEPLOYED);
     m_intakeDeployEncoder = new SparkMaxRelativeEncoder(m_intakeDeploy->GetEncoder());
     
@@ -56,10 +55,6 @@ void Intake::SetIntakeRoller(double speed)
 void Intake::SetIntakeDeploy(double speed)
 {
      m_intakeDeploy->Set(speed); 
-}
-bool Intake::GetIntakeStowed()
-{
-    return m_isIntakeStowed->Get();
 }
 
 bool Intake::GetIntakeDeployed()

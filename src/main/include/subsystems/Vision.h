@@ -47,5 +47,12 @@ public:
     double targetArea;
     double targetSkew;
 
+    void SetClimbCameraState(bool state);
+    bool GetClimbCameraState();
+
+private:
+
+    bool m_climbCameraState;
+
 };
 

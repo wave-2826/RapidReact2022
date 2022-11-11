@@ -10,10 +10,10 @@ right joystick (y) = indexer
 // Intake
 left trigger = intake IN 
 Y + left trigger = intake OUT
-right bumper = deploy intake
-left bumper = stow intake
+select + right bumper = hook deploy
+select + left bumber = hook stow
 
 // Punch
 A = both punchers
-X = front punch
-B = back punch 
+X = front/outer punch
+B = back/inner punch 
