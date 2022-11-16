@@ -48,11 +48,11 @@ TwoBallAutoTimed::TwoBallAutoTimed(Punch* punch, Drive* drive, Intake* intake, T
             ( 
                 WaitCommand1(units::second_t(1.5)),
                 // forward ball 2
-                DriveHeadingCommand(-0.60, units::time::second_t(0.75), drive),
+                DriveHeadingCommand(-0.60, units::time::second_t(0.80), drive),
                 DriveHeadingCommand(-0.15, units::time::second_t(0.3), drive),
                 WaitCommand1(units::time::second_t(2.5)),
                 // backwards to hub
-                DriveHeadingCommand(0.55, units::time::second_t(0.75
+                DriveHeadingCommand(0.55, units::time::second_t(0.80
                 ), drive),
                 DriveHeadingCommand(0.15, units::time::second_t(0.3), drive),
                 WaitCommand1(units::time::second_t(1.5)),
