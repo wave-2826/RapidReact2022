@@ -577,7 +577,6 @@ void Robot::TeleopPeriodic() {
   // {
   //   m_frontPunchCommand->Schedule(); 
   // }
-  
 
   // run the SEQUENTIAL punch command - A
   if (m_container->getOperatorJS()->GetAButton())
