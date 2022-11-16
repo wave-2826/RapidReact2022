@@ -562,45 +562,6 @@ void Robot::TeleopPeriodic() {
     Robot::m_phase = phase_0_notStarted;
   }
   
-  // // RAMP UP/DOWN DRIVE SPEED
-  // // VERY EXPERIMENTAL CODE!!! NEED TO TEST
-  // double moveInput = m_container->getDriverJS()->GetLeftY();
-  // double rotateInput = m_container->getDriverJS()->GetRightX();
-  // double cutSpeed = m_container->getDriverJS()->GetLeftTriggerAxis();
-  // double moveInputSpeed = 0;
-  // double rotateInputSpeed = 0;
-  // // we are NOT climbing
-  // if (fabs(moveInput) >= 0.07)
-  // {
-  //   // transform move drive speed
-  //   double currentMoveInputSpeed = m_container->m_drive.GetMoveInputSpeed();
-  //   // std::cout << "MOVE INPUT: " << currentMoveInputSpeed << std::endl;
-  //   moveInputSpeed = m_container->m_drive.TransformDriveSpeed(currentMoveInputSpeed, moveInput);
-  // }
-  // if (fabs(rotateInput) >= 0.07)
-  // {
-  //   // transform rotate drive speed
-  //   double currentRotateInputSpeed = m_container->m_drive.GetRotateInputSpeed();
-  //   rotateInputSpeed = m_container->m_drive.TransformDriveSpeed(currentRotateInputSpeed, rotateInput);
-  // }
-  // // on trigger, cut speed by a percentage
-  // if (cutSpeed >= 0.07)
-  // {
-  //   moveInputSpeed = 0.75 * moveInputSpeed;
-  //   rotateInputSpeed = 0.75 * rotateInputSpeed;
-  // }
-  // // we ARE climbing
-  // if (fabs(climbSpeed) >= 0.07)
-  // {
-  //   moveInputSpeed = 0.5;
-  //   rotateInputSpeed = 0;
-  // }  
-  // // set move + rotate input speed persisted value
-  // m_container->m_drive.SetMoveInputSpeed(moveInputSpeed);
-  // m_container->m_drive.SetRotateInputSpeed(rotateInputSpeed);
-  // // set drive motors
-  // m_container->m_drive.arcadeDrive(moveInputSpeed, rotateInputSpeed);
-
 //////////////////  Puncher   /////////////////////////////
 
   // run the BACK punch command - B
